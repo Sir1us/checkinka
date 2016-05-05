@@ -9,7 +9,7 @@ class CashdeskTimesheetController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        if (isset($_POST["datepicker"])) {
+        if (!empty($_POST["datepicker"])) {
             $postDate = $_POST["datepicker"];
 
 
@@ -65,5 +65,7 @@ class CashdeskTimesheetController extends \yii\web\Controller
                 'wrong_timesheets' => $wrong_timesheets,
             ]);
         }
+        return $this->render('index');
     }
+
 }

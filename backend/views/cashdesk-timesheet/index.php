@@ -1,20 +1,35 @@
 <?php
 /* @var $this yii\web\View */
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
+
+
 
 
 ?>
 
 
-<h1 xmlns="http://www.w3.org/1999/html">Check</h1>
+<h1>Check</h1>
     <form method="POST">
-        <div class="picker">
-        <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
-        <p><input type="text" id="datepicker" name="datepicker"><input type="submit" id="submit" value="Submit"></p>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="input-group">
+                    <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
+                    <!--Хороший варинт выбора дат по году и месяцу
+                    <input type="text" class="datepicker-here form-control" data-min-view="months" data-view="months" data-date-format="MM yyyy" />-->
+                        <input type="text" id="datepicker" name="datepicker" class="form-control" />
+                    <span class="input-group-btn">
+                        <input type="submit" id="submit" value="Submit" class="btn btn-default">
+
+                </span>
+
+                </div>
+            </div>
         </div>
+        <hr />
     </form>
-<?php if (!empty($_POST["datepicker"])) {  ?>
+<?php if (isset($_POST["datepicker"])) {  ?>
 
 
 
@@ -46,6 +61,6 @@ use yii\widgets\ActiveForm;
         </tbody>
     </table>
 <?php } else {
-    echo "choose date";
+    echo "<p class=\"bg-success\" style=\"padding: 15px;\">Choose Date</p>";
 
 } ?>
