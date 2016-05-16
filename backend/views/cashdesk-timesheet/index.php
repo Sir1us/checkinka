@@ -1,35 +1,29 @@
 <?php
 /* @var $this yii\web\View */
 use yii\helpers\Html;
-use yii\widgets\LinkPager;
-use yii\widgets\ActiveForm;
-
-
-
-
 ?>
 
-
-<h1>Check</h1>
+<h2>Checking</h2>
     <form method="POST">
         <div class="row">
             <div class="col-lg-3">
                 <div class="input-group">
                     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
-                    <!--Хороший варинт выбора дат по году и месяцу
-                    <input type="text" class="datepicker-here form-control" data-min-view="months" data-view="months" data-date-format="MM yyyy" />-->
-                        <input type="text" id="datepicker" name="datepicker" class="form-control" />
-                    <span class="input-group-btn">
-                        <input type="submit" id="submit" value="Submit" class="btn btn-default">
-
-                </span>
-
+                    <?php if (isset($_POST["datepicker"])) {
+                      $date =  $_POST["datepicker"]; ?>
+                       <?= "<input type="."text"." id="."datepicker"." title="."При выборе любой даты интервал + месяц"." name="."datepicker"." class="."form-control"." value="."$date"." />" ?>
+                       <?php } else { ?>
+                        <input type="text" id="datepicker" name="datepicker" title="При выборе любой даты интервал + месяц" class="form-control" value="2016-01-01" />
+                   <?php } ?>
+                        <span class="input-group-btn">
+                            <input type="submit" id="submit" value="Download" class="btn btn-primary">
+                        </span>
                 </div>
             </div>
         </div>
         <hr />
     </form>
-<?php if (isset($_POST["datepicker"])) {  ?>
+<?php if (isset($_POST["datepicker"])) : ?>
 
 
 
@@ -45,7 +39,62 @@ use yii\widgets\ActiveForm;
         </tr>
         </thead>
         <tbody>
-<?php foreach ($wrong_timesheets as $value): ?>
+
+
+<hr/>
+
+<?php foreach ($wrong_timesheets as $value):
+
+    if (empty($wrong_actions_close) && empty($wrong_actions_open)) {
+
+        echo '<tr><td colspan="5" style="background: #f2dede">Нет данных</td></tr>';
+
+    } else {
+
+        if (empty($wrong_actions_open)) {
+
+            echo '<tr><td colspan="5" style="background: #f2dede">Нет данных для закрытия</td></tr>';
+
+            if (!empty($wrong_actions_close)) {
+
+                if ($wrong_actions_close['dt'] !== $value['closedt']) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Время закрытия не указано</td></tr>';
+                }
+                if ($wrong_actions_close['cashier'] !== $value['cashier']) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере кассира</td></tr>';
+                }
+                if ($wrong_actions_close['cashdesk'] !== $value['cashdesk']) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере касс</td></tr>';
+                }
+                if ($wrong_actions_close['cs_action'] !== 4) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Действие не равно 4</td></tr>';
+                }
+            }
+
+        } elseif (empty($wrong_actions_close)) {
+
+            echo '<tr><td colspan="5" style="background: #f2dede">Нет данных для открытия</td></tr>';
+
+            if (!empty($wrong_actions_open)) {
+
+                if ($wrong_actions_open['dt'] !== $value['opendt']) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Время открытия не указано</td></tr>';
+                }
+                if ($wrong_actions_open['cashier'] !== $value['cashier']) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере кассира</td></tr>';
+                }
+                if ($wrong_actions_open['cashdesk'] !== $value['cashdesk']) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере касс</td></tr>';
+                }
+                if ($wrong_actions_open['cs_action'] !== 1) {
+                    echo '<tr><td colspan="5" style="background: #f2dede">Действия не равно 1</td></tr>';
+                }
+            }
+        }
+    }
+    ?>
+
+
     <tr>
     <td><?= Html::tag('id', $value['id']) ?></td>
 
@@ -57,10 +106,12 @@ use yii\widgets\ActiveForm;
 
     <td><?= Html::tag('closedt', $value['closedt']) ?></td>
     </tr>
-<?php endforeach; ?>
+
+    <?php endforeach; ?>
         </tbody>
     </table>
-<?php } else {
-    echo "<p class=\"bg-success\" style=\"padding: 15px;\">Choose Date</p>";
+<?php  else :
+    echo "<p class=\"bg-info\" style=\"padding: 15px;\">Выберите дату</p>";
+endif; ?>
 
-} ?>
+

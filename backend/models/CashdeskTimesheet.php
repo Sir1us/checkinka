@@ -15,17 +15,25 @@ use Yii;
  */
 class CashdeskTimesheet extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'cashdesk_timesheet';
+    public static function cashdeskTS($postDate) {
+
+        return Yii::$app->db->createCommand("SELECT * FROM cashdesk_timesheet WHERE opendt
+            BETWEEN '$postDate' AND
+            (date '$postDate' + interval '1 month') or closedt
+            BETWEEN '$postDate' AND
+            (date '$postDate' + interval '1 month')")
+            ->queryAll();
     }
+    public static function Test($ids) {
+        return Yii::$app->db->createCommand("SELECT * FROM cashdesk_actions WHERE id = $ids ORDER BY id")->queryAll();
+    }
+
+
 
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [

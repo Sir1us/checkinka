@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\CashdeskActions;
+use backend\models\CashdeskTimesheet;
 use Yii;
-use yii\data\Pagination;
+
 
 class CashdeskTimesheetController extends \yii\web\Controller
 {
@@ -12,20 +14,9 @@ class CashdeskTimesheetController extends \yii\web\Controller
         if (!empty($_POST["datepicker"])) {
             $postDate = $_POST["datepicker"];
 
-
-            $cashdeskTS = Yii::$app->db->createCommand("SELECT * FROM cashdesk_timesheet WHERE opendt
-            BETWEEN '$postDate' AND
-            (date '$postDate' + interval '1 month') or closedt
-            BETWEEN '$postDate' AND
-            (date '$postDate' + interval '1 month')")
-                ->queryAll();
-
-
-            $cashdeskActions = Yii::$app->db->createCommand("SELECT * FROM cashdesk_actions WHERE dt
-            BETWEEN '$postDate' AND
-            (date '$postDate' + interval '1 month')")
-                ->queryAll();
-
+            $cashdeskTS = CashdeskTimesheet::cashdeskTS($postDate);
+            $wrong_actions_open = array();
+            $wrong_actions_close = array();
             $wrong_timesheets = array();
             foreach ($cashdeskTS as $tkey => $tvalue) {
                 $open = $tvalue['opendt'];
@@ -34,38 +25,58 @@ class CashdeskTimesheetController extends \yii\web\Controller
                 $cashdeskNum = $tvalue['cashdesk'];
                 $open_OK = False;
                 $close_OK = False;
-                foreach ($cashdeskActions as $avalue) {
-                    $cashierIdA = $avalue['cashier'];
-                    $cashdeskNumA = $avalue['cashdesk'];
-                    $dt = $avalue['dt'];
-                    $action = $avalue['cs_action'];
-                    if ($open == $dt && $action == 1 && $cashierId == $cashierIdA && $cashdeskNum == $cashdeskNumA) {
-                        $open_OK = True;
+
+                $openActions = CashdeskActions::findopenActions($open, $cashierId, $cashdeskNum);
+
+                $closeActions = CashdeskActions::findcloseActions($open, $cashierId, $cashdeskNum);
+
+                foreach ($openActions as $akey => $ovalue) {
+                    $cashierIdA = $ovalue['cashier'];
+                    $cashdeskNumA = $ovalue['cashdesk'];
+                    $dt = $ovalue['dt'];
+                    $action = $ovalue['cs_action'];
+                    if ($open_OK == false) {
+                        if ($open == $dt && $action == 1 && $cashierId == $cashierIdA && $cashdeskNum == $cashdeskNumA) {
+                            $open_OK = True;
+                        }
                     }
                 }
-
-                foreach ($cashdeskActions as $avalue) {
-                    $cashierIdA = $avalue['cashier'];
-                    $cashdeskNumA = $avalue['cashdesk'];
-                    $dt = $avalue['dt'];
-                    $action = $avalue['cs_action'];
-                    if ($close == $dt && $action == 4 && $cashierId == $cashierIdA && $cashdeskNum == $cashdeskNumA) {
-                        $close_OK = True;
+                    foreach ($closeActions as $key => $cvalue) {
+                        $cashierIdA = $cvalue['cashier'];
+                        $cashdeskNumA = $cvalue['cashdesk'];
+                        $dt = $cvalue['dt'];
+                        $action = $cvalue['cs_action'];
+                        if ($close_OK == false) {
+                            if ($close == $dt && $action == 4 && $cashierId == $cashierIdA && $cashdeskNum == $cashdeskNumA) {
+                                $close_OK = True;
+                            }
+                        }
                     }
-                }
 
-                if ($open_OK == False || $close_OK == False) {
+                if ($open_OK == False) {
+                        $wrong_actions_open = @$ovalue;
                     $wrong_timesheets[$tkey] = $tvalue;
                 }
-
-
+                if ($close_OK == False) {
+                    $wrong_actions_close = @$cvalue;
+                    $wrong_timesheets[$tkey] = $tvalue;
+                }
             }
 
             return $this->render('index', [
                 'wrong_timesheets' => $wrong_timesheets,
+                'wrong_actions_open' => $wrong_actions_open,
+                'wrong_actions_close' => $wrong_actions_close,
             ]);
         }
         return $this->render('index');
     }
-
+    public function actionTest()
+    {
+        $ids = [1, 7, 10, 5];
+        foreach ($ids as $id1) {
+            $res = CashdeskTimesheet::Test($id1);// получить запись
+                    var_dump($res);
+        }
+    }
 }
