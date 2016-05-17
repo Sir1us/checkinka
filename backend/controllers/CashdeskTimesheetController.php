@@ -15,22 +15,16 @@ class CashdeskTimesheetController extends \yii\web\Controller
             $postDate = $_POST["datepicker"];
 
             $cashdeskTS = CashdeskTimesheet::cashdeskTS($postDate);
-            $wrong_actions_open = array();
-            $wrong_actions_close = array();
             $wrong_timesheets = array();
-            foreach ($cashdeskTS as $tkey => $tvalue) {
+            foreach ($cashdeskTS as $tskey => $tvalue) {
                 $open = $tvalue['opendt'];
                 $close = $tvalue['closedt'];
                 $cashierId = $tvalue['cashier'];
                 $cashdeskNum = $tvalue['cashdesk'];
                 $open_OK = False;
                 $close_OK = False;
-
                 $openActions = CashdeskActions::findopenActions($open, $cashierId, $cashdeskNum);
-
-                $closeActions = CashdeskActions::findcloseActions($open, $cashierId, $cashdeskNum);
-
-                foreach ($openActions as $akey => $ovalue) {
+                foreach ($openActions as $okey => $ovalue) {
                     $cashierIdA = $ovalue['cashier'];
                     $cashdeskNumA = $ovalue['cashdesk'];
                     $dt = $ovalue['dt'];
@@ -41,7 +35,10 @@ class CashdeskTimesheetController extends \yii\web\Controller
                         }
                     }
                 }
-                    foreach ($closeActions as $key => $cvalue) {
+
+
+                $closeActions = CashdeskActions::findcloseActions($open, $cashierId, $cashdeskNum);
+                    foreach ($closeActions as $ckey => $cvalue) {
                         $cashierIdA = $cvalue['cashier'];
                         $cashdeskNumA = $cvalue['cashdesk'];
                         $dt = $cvalue['dt'];
@@ -52,31 +49,32 @@ class CashdeskTimesheetController extends \yii\web\Controller
                             }
                         }
                     }
-
-                if ($open_OK == False) {
-                        $wrong_actions_open = @$ovalue;
-                    $wrong_timesheets[$tkey] = $tvalue;
+                
+                if (empty($closeActions) && empty($openActions)) {
+                    $wrong_timesheets[$tskey] = $tvalue;
+                } elseif (empty($closeActions)) {
+                    $wrong_timesheets[$tskey] = $tvalue;
+                } elseif (empty($openActions)) {
+                    $wrong_timesheets[$tskey] = $tvalue;
+                } elseif (!empty($openActions)) {
+                    if ($close_OK == false) {
+                        $tvalue['error'] = ['Open error'];
+                        $wrong_timesheets[$tskey] = $tvalue;
+                    }
+                } elseif (!empty($closeActions)) {
+                    if ($open_OK == false) {
+                        $tvalue['error'] = ['Close error'];
+                        $wrong_timesheets[$tskey] = $tvalue;
+                    }
                 }
-                if ($close_OK == False) {
-                    $wrong_actions_close = @$cvalue;
-                    $wrong_timesheets[$tkey] = $tvalue;
-                }
+                
             }
 
             return $this->render('index', [
                 'wrong_timesheets' => $wrong_timesheets,
-                'wrong_actions_open' => $wrong_actions_open,
-                'wrong_actions_close' => $wrong_actions_close,
+
             ]);
         }
         return $this->render('index');
-    }
-    public function actionTest()
-    {
-        $ids = [1, 7, 10, 5];
-        foreach ($ids as $id1) {
-            $res = CashdeskTimesheet::Test($id1);// получить запись
-                    var_dump($res);
-        }
     }
 }

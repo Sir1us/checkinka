@@ -43,56 +43,7 @@ use yii\helpers\Html;
 
 <hr/>
 
-<?php foreach ($wrong_timesheets as $value):
-
-    if (empty($wrong_actions_close) && empty($wrong_actions_open)) {
-
-        echo '<tr><td colspan="5" style="background: #f2dede">Нет данных</td></tr>';
-
-    } else {
-
-        if (empty($wrong_actions_open)) {
-
-            echo '<tr><td colspan="5" style="background: #f2dede">Нет данных для закрытия</td></tr>';
-
-            if (!empty($wrong_actions_close)) {
-
-                if ($wrong_actions_close['dt'] !== $value['closedt']) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Время закрытия не указано</td></tr>';
-                }
-                if ($wrong_actions_close['cashier'] !== $value['cashier']) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере кассира</td></tr>';
-                }
-                if ($wrong_actions_close['cashdesk'] !== $value['cashdesk']) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере касс</td></tr>';
-                }
-                if ($wrong_actions_close['cs_action'] !== 4) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Действие не равно 4</td></tr>';
-                }
-            }
-
-        } elseif (empty($wrong_actions_close)) {
-
-            echo '<tr><td colspan="5" style="background: #f2dede">Нет данных для открытия</td></tr>';
-
-            if (!empty($wrong_actions_open)) {
-
-                if ($wrong_actions_open['dt'] !== $value['opendt']) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Время открытия не указано</td></tr>';
-                }
-                if ($wrong_actions_open['cashier'] !== $value['cashier']) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере кассира</td></tr>';
-                }
-                if ($wrong_actions_open['cashdesk'] !== $value['cashdesk']) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Ошибка в номере касс</td></tr>';
-                }
-                if ($wrong_actions_open['cs_action'] !== 1) {
-                    echo '<tr><td colspan="5" style="background: #f2dede">Действия не равно 1</td></tr>';
-                }
-            }
-        }
-    }
-    ?>
+<?php  foreach ($wrong_timesheets as $value) :  ?>
 
 
     <tr>
@@ -106,8 +57,8 @@ use yii\helpers\Html;
 
     <td><?= Html::tag('closedt', $value['closedt']) ?></td>
     </tr>
-
     <?php endforeach; ?>
+
         </tbody>
     </table>
 <?php  else :

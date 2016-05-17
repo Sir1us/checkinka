@@ -24,9 +24,7 @@ class CashdeskTimesheet extends \yii\db\ActiveRecord
             (date '$postDate' + interval '1 month')")
             ->queryAll();
     }
-    public static function Test($ids) {
-        return Yii::$app->db->createCommand("SELECT * FROM cashdesk_actions WHERE id = $ids ORDER BY id")->queryAll();
-    }
+    
 
 
 
