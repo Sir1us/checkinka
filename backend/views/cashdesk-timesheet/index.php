@@ -11,12 +11,12 @@ use yii\helpers\Html;
                     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
                     <?php if (isset($_POST["datepicker"])) {
                       $date =  $_POST["datepicker"]; ?>
-                       <?= "<input type="."text"." id="."datepicker"." title="."При выборе любой даты интервал + месяц"." name="."datepicker"." class="."form-control"." value="."$date"." />" ?>
+                       <?= "<input type="."text"." id="."datepicker"." name="."datepicker"." class="."form-control datepicker"." value="."$date"." />" ?>
                        <?php } else { ?>
-                        <input type="text" id="datepicker" name="datepicker" title="При выборе любой даты интервал + месяц" class="form-control" value="2016-01-01" />
+                        <input type="text" id="datepicker" name="datepicker"  class="form-control" value="2016-01-01" />
                    <?php } ?>
                         <span class="input-group-btn">
-                            <input type="submit" id="submit" value="Download" class="btn btn-primary">
+                            <input type="submit" id="submit" value="Загрузить" title="При выборе любой даты интервал + месяц" class="btn btn-primary">
                         </span>
                 </div>
             </div>
@@ -28,14 +28,14 @@ use yii\helpers\Html;
 
 
 
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-hover table-inverse">
         <thead>
         <tr>
-            <th>id</th>
-            <th>cashier</th>
-            <th>cashdesk</th>
-            <th>opendt</th>
-            <th>closedt</th>
+            <th>Запись</th>
+            <th>Кассир</th>
+            <th>Касса</th>
+            <th>Дата открытия кассы</th>
+            <th>Дата закрытия кассы</th>
         </tr>
         </thead>
         <tbody>
@@ -43,7 +43,31 @@ use yii\helpers\Html;
 
 <hr/>
 
-<?php  foreach ($wrong_timesheets as $value) :  ?>
+<?php
+
+foreach ($wrong_timesheets as $key => $value) :  ?>
+
+
+
+
+
+
+    <!--<?php
+    /**
+     * Проверял, работает корректно, не уверен правильно ли сделано и мог что то упустить
+     * Краткое описание ошибок, если необходимо, можно включить
+     */
+    /*if (isset($value['error'])) :
+     foreach ($value['error'] as $errorvalue) :
+
+        echo '<tr><td colspan="5" style="background: #f2dede">'."$errorvalue".'</td></tr>';
+
+     endforeach;
+     endif; */?>-->
+
+
+
+
 
 
     <tr>
