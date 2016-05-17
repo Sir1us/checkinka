@@ -53,20 +53,18 @@ foreach ($wrong_timesheets as $key => $value) : ?>
 
 
     <!--<?php
-
     /**
      * Проверял, работает корректно, но возможно что то упустил
      * Краткое описание ошибок, если необходимо, можно включить
      */
-
     /*if (isset($value['error'])) :
-        
+
      foreach ($value['error'] as $errorvalue) :
-         
+
         echo '<tr><td colspan="5" style="background: #f2dede">'."$errorvalue".'</td></tr>';
-     
+
      endforeach;
-    
+
      endif; */?>-->
 
 
