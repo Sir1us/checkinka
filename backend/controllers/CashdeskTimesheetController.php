@@ -54,10 +54,10 @@ class CashdeskTimesheetController extends \yii\web\Controller
                     $tvalue['error'] = ['Нет данных'];
                     $wrong_timesheets[$tskey] = $tvalue;
                 } elseif (empty($closeActions)) {
-                    $tvalue['error'] = ['Нет даты закрытия'];
+                    $tvalue['error'] = ['Ошибка в данных'];
                     $wrong_timesheets[$tskey] = $tvalue;
                 } elseif (empty($openActions)) {
-                    $tvalue['error'] = ['Нет даты открытия'];
+                    $tvalue['error'] = ['Ошибка в данных'];
                     $wrong_timesheets[$tskey] = $tvalue;
                 } elseif (!empty($openActions)) {
                     if ($close_OK == false) {
