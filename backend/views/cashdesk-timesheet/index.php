@@ -9,10 +9,16 @@ use yii\helpers\Html;
             <div class="col-lg-3">
                 <div class="input-group">
                     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
-                    <?php if (isset($_POST["datepicker"])) {
-                      $date =  $_POST["datepicker"]; ?>
-                       <?= "<input type="."text"." id="."datepicker"." name="."datepicker"." class="."form-control datepicker"." value="."$date"." />" ?>
+                    <?php
+                    $date = Yii::$app->request->post('datepicker');
+
+                    if (isset($date) && !empty($date)) { ?>
+
+                        <?= Html::input('raw', 'datepicker', $date, ['class'=> 'form-control', 'id' => 'datepicker', 'pattern' => '(^(((\d\d)(([02468][048])|([13579][26]))-02-29)|(((\d\d)(\d\d)))-((((0\d)|(1[0-2]))-((0\d)|(1\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))$)']) ?>
+
+
                        <?php } else { ?>
+
                         <input type="text" id="datepicker" name="datepicker"  class="form-control" value="2016-01-01" />
                    <?php } ?>
                         <span class="input-group-btn">
@@ -22,8 +28,9 @@ use yii\helpers\Html;
             </div>
         </div>
         <hr />
+        <hr/>
     </form>
-<?php if (isset($_POST["datepicker"])) : ?>
+<?php if (isset($date) && !empty($date)) : ?>
 
 
 
@@ -40,55 +47,109 @@ use yii\helpers\Html;
         </thead>
         <tbody>
 
+            <?php
+            $warningMsg = false;
+            foreach ($wrong_timesheets as $key => $value) : ?>
+                <?php foreach ($value['error'] as $errorvalue) : ?>
 
-<hr/>
+                    <?php  if($errorvalue == 'Нет данных') : ?>
+                        <?php  if($warningMsg == false) : ?>
+                            <?= '<tr><td colspan="5" style="background: #f2dede">'."$errorvalue".'</td></tr>';
+                            $warningMsg = true;
+                            ?>
+                            <?php endif; ?>
 
-<?php
+                        <tr>
+                            <td><?= Html::tag('p', $value['id'], ['class'=> 'marginForP']) ?></td>
 
-foreach ($wrong_timesheets as $key => $value) : ?>
+                            <td><?= Html::tag('p', $value['cashier'], ['class'=> 'marginForP']) ?></td>
 
+                            <td><?= Html::tag('p', $value['cashdesk'], ['class'=> 'marginForP']) ?></td>
 
+                            <td><?= Html::tag('p', $value['opendt'], ['class'=> 'marginForP']) ?></td>
 
+                            <td><?= Html::tag('p', $value['closedt'] ,['class'=> 'marginForP']) ?></td>
+                        </tr>
 
-
-
-    <!--<?php
-    /**
-     * Проверял, работает корректно, но возможно что то упустил
-     * Краткое описание ошибок, если необходимо, можно включить
-     */
-    /*if (isset($value['error'])) :
-
-     foreach ($value['error'] as $errorvalue) :
-
-        echo '<tr><td colspan="5" style="background: #f2dede">'."$errorvalue".'</td></tr>';
-
-     endforeach;
-
-     endif; */?>-->
-
+                    <?php endif; ?>
 
 
 
+                <?php endforeach; ?>
+            <?php endforeach; ?>
 
 
-    <tr>
-    <td><?= Html::tag('id', $value['id']) ?></td>
+            <?php
+            $warningMsg = false;
+            foreach ($wrong_timesheets as $key => $value) : ?>
+                <?php foreach ($value['error'] as $errorvalue) : ?>
 
-    <td><?= Html::tag('cashier', $value['cashier']) ?></td>
 
-    <td><?= Html::tag('cashdesk', $value['cashdesk']) ?></td>
+                    <?php  if($errorvalue == 'Ошибка в данных') : ?>
 
-    <td><?= Html::tag('opendt', $value['opendt']) ?></td>
+                        <?php  if($warningMsg == false) : ?>
+                            <?= '<tr><td colspan="5" style="background: #f2dede">'."$errorvalue".'</td></tr>';
+                            $warningMsg = true;
+                            ?>
+                        <?php endif; ?>
 
-    <td><?= Html::tag('closedt', $value['closedt']) ?></td>
-    </tr>
+
+
+                        <tr>
+                            <td><?= Html::tag('p', $value['id'], ['class'=> 'marginForP']) ?></td>
+
+                            <td><?= Html::tag('p', $value['cashier'], ['class'=> 'marginForP']) ?></td>
+
+                            <td><?= Html::tag('p', $value['cashdesk'], ['class'=> 'marginForP']) ?></td>
+
+                            <td><?= Html::tag('p', $value['opendt'], ['class'=> 'marginForP']) ?></td>
+
+                            <td><?= Html::tag('p', $value['closedt'] ,['class'=> 'marginForP']) ?></td>
+                        </tr>
+                    <?php endif; ?>
+
+
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+
+    <?php
+    $warningMsg = false;
+    foreach ($wrong_timesheets as $key => $value) : ?>
+        <?php foreach ($value['error'] as $errorvalue) : ?>
+
+
+
+
+            <?php if($errorvalue == 'Ошибка с датой закрытия') : ?>
+                <?php  if($warningMsg == false) : ?>
+                    <?= '<tr><td colspan="5" style="background: #f2dede">'."$errorvalue".'</td></tr>';
+                    $warningMsg = true;
+                    ?>
+                <?php endif; ?>
+
+
+
+                <tr>
+                    <td><?= Html::tag('p', $value['id'], ['class'=> 'marginForP']) ?></td>
+
+                    <td><?= Html::tag('p', $value['cashier'], ['class'=> 'marginForP']) ?></td>
+
+                    <td><?= Html::tag('p', $value['cashdesk'], ['class'=> 'marginForP']) ?></td>
+
+                    <td><?= Html::tag('p', $value['opendt'], ['class'=> 'marginForP']) ?></td>
+
+                    <td><?= Html::tag('p', $value['closedt'] ,['class'=> 'marginForP']) ?></td>
+                </tr>
+            <?php endif; ?>
+
+
+        <?php endforeach; ?>
     <?php endforeach; ?>
-
         </tbody>
     </table>
 <?php  else :
     echo "<p class=\"bg-info\" style=\"padding: 15px;\">Выберите дату</p>";
 endif; ?>
+
 
 

@@ -15,16 +15,13 @@ use Yii;
  */
 class CashdeskTimesheet extends \yii\db\ActiveRecord
 {
-    public static function cashdeskTS($postDate) {
+    public static function cashdeskTS() {
 
-        return Yii::$app->db->createCommand("SELECT * FROM cashdesk_timesheet WHERE opendt
-            BETWEEN '$postDate' AND
-            (date '$postDate' + interval '1 month') or closedt
-            BETWEEN '$postDate' AND
-            (date '$postDate' + interval '1 month')")
-            ->queryAll();
+
+        return 'cashdesk_timesheet';
     }
-    
+
+
 
 
 

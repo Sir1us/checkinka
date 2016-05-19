@@ -20,12 +20,11 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css',
-        'css/datepicker.min.css'
+        'css/style.css'
     ];
     public $js = [
         '//code.jquery.com/ui/1.11.4/jquery-ui.js',
         'js/pickdate.js',
-        'js/datepicker.min.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

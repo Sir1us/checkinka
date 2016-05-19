@@ -16,32 +16,11 @@ use Yii;
 class CashdeskActions extends \yii\db\ActiveRecord
 {
     
-    public static function findopenActions($open, $cashierId, $cashdeskNum)
+    public static function findActions()
     {
-
-        return Yii::$app->db->createCommand("SELECT * FROM cashdesk_actions 
-                                                        WHERE cs_action = 1 
-                                                           AND 
-                                                         cashdesk = '$cashdeskNum' AND 
-                                                         cashier = '$cashierId' AND 
-                                                         dt = '$open'
-                                                         ORDER BY cashdesk, cashier LIMIT 1")
-            ->queryAll();
-
-    }
-
-    public static function findcloseActions($open, $cashierId, $cashdeskNum)
-    {
-
-        return Yii::$app->db->createCommand("SELECT * FROM cashdesk_actions 
-                                                        WHERE cs_action = 4 
-                                                           AND 
-                                                         cashdesk = '$cashdeskNum' AND 
-                                                         cashier = '$cashierId' AND 
-                                                         dt > '$open'
-                                                         ORDER BY dt ASC LIMIT 1")
-            ->queryAll();
-
+        
+        return 'cashdesk_actions';
+        
     }
 
 
