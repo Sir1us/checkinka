@@ -30,6 +30,6 @@ use yii\helpers\Html;
     <hr />
     <hr />
 
-    <p class="bg-danger" style="padding: 15px;">Что вы делаете?</p>
+    <p class="bg-danger" style="padding: 15px;">Не стоит так делать...</p>
 </form>
 
