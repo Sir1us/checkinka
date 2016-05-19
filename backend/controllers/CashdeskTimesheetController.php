@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\CashdeskActions;
 use backend\models\CashdeskTimesheet;
+use yii\data\Pagination;
 use \yii\db\Expression;
 use Yii;
 
@@ -20,8 +21,8 @@ class CashdeskTimesheetController extends \yii\web\Controller
 
                 $wtf = [':dt1' => $postDate];
                 $cashdeskTS = CashdeskTimesheet::find()->
-                where(['BETWEEN', 'opendt', $postDate, new Expression('(:dt1::date + interval \'1 month\')', $wtf)], $wtf)->
-                orWhere(['BETWEEN', 'closedt', $postDate, new Expression('(:dt1::date + interval \'1 month\')', $wtf)], $wtf)->
+                where(['BETWEEN', 'opendt', $postDate, new Expression('(:dt1::date + interval \'1 month\')')], $wtf)->
+                orWhere(['BETWEEN', 'closedt', $postDate, new Expression('(:dt1::date + interval \'1 month\')')], $wtf)->
                 asArray()->all();
 
 
@@ -101,11 +102,9 @@ class CashdeskTimesheetController extends \yii\web\Controller
                             $wrong_timesheets[$tskey] = $tvalue;
                         }
                     }
-
                 }
                 return $this->render('index', [
                     'wrong_timesheets' => $wrong_timesheets,
-
                 ]);
             }
         } else {
@@ -113,5 +112,4 @@ class CashdeskTimesheetController extends \yii\web\Controller
         }
         return $this->render('error');
     }
-
 }

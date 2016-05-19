@@ -35,7 +35,7 @@ use yii\helpers\Html;
 
 
 
-    <table class="table table-striped table-bordered table-hover table-inverse">
+    <table class="table table-striped table-bordered table-hover">
         <thead>
         <tr>
             <th>Запись</th>
@@ -147,7 +147,9 @@ use yii\helpers\Html;
     <?php endforeach; ?>
         </tbody>
     </table>
-<?php  else :
+<?php
+
+else :
     echo "<p class=\"bg-info\" style=\"padding: 15px;\">Выберите дату</p>";
 endif; ?>
 
